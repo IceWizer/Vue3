@@ -2,10 +2,10 @@
     <div class="">
         <div class="w-50 mx-auto">
             <h1 class="text-center">Création de compte</h1>
-            <b-form>
+            <form>
                 <div class="mt-2">
                     <label for="username">Name</label>
-                    <b-form-input
+                    <BFormInput
                         type="text"
                         name="username"
                         id="username"
@@ -14,13 +14,13 @@
                         autocomplete="username"
                         @focus="stateOn.username = true"
                     />
-                    <b-form-invalid-feedback>
+                    <p>
                         {{ getErrorMessage(validators.username, item.username) }}
-                    </b-form-invalid-feedback>
+                    </p>
                 </div>
                 <div class="mt-2">
                     <label for="email">Mail</label>
-                    <b-form-input
+                    <BFormInput
                         type="text"
                         name="email"
                         id="email"
@@ -29,14 +29,14 @@
                         autocomplete="email"
                         @focus="stateOn.email = true"
                     />
-                    <b-form-invalid-feedback>
+                    <p>
                         {{ getErrorMessage(validators.email, item.email) }}
-                    </b-form-invalid-feedback>
+                    </p>
                 </div>
                 <div class="mt-2">
                     <label for="password">Mot de passe</label>
-                    <b-input-group>
-                        <b-form-input
+                    <BFormGroup>
+                        <BFormInput
                             :type="showPassword ? 'text' : 'password'"
                             name="password"
                             id="password"
@@ -46,21 +46,21 @@
                             autocomplete="current-password"
                             @focus="stateOn.password = true"
                         />
-                        <b-input-group-append>
-                            <b-button @click="showPassword = !showPassword" size="sm" variant="outline-secondary" class="text-dark rounded-end">
+                        <div>
+                            <button @click="showPassword = !showPassword" size="sm" variant="outline-secondary" class="text-dark rounded-end">
                                 <b-icon-eye v-if="showPassword" />
                                 <b-icon-eye-slash v-else />
-                            </b-button>
-                        </b-input-group-append>
-                        <b-form-invalid-feedback>
+                            </button>
+                        </div>
+                        <p>
                             {{ getErrorMessage(validators.password, item.password) }}
-                        </b-form-invalid-feedback>
-                    </b-input-group>
+                        </p>
+                    </BFormGroup>
                 </div>
                 <div class="mt-2 mx-auto w-50">
-                    <b-button class="w-100" type="submit" @click="registerCheck()">Créer ton compte</b-button>
+                    <button class="w-100" type="submit" @click="registerCheck()">Créer ton compte</button>
                 </div>
-            </b-form>
+            </form>
             <div class="text-center mt-1">
                 <router-link to="login">Déjà un compte</router-link>
             </div>
@@ -73,10 +73,12 @@ import { useModules } from "@store/utils";
 import authStore from "@store/modules/authStore";
 import {onUnmounted} from "vue";
 import * as Yup from "yup";
+import {BFormGroup, BFormInput} from "bootstrap-vue-next";
 
 export default {
     name: "Register.vue",
-    data() {
+  components: {BFormGroup, BFormInput},
+  data() {
         return {
             item: {
                 username: '',

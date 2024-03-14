@@ -1,12 +1,14 @@
 <template>
-
+    <div>
+        <h1>Logout</h1>
+    </div>
 </template>
 
 <script>
-import {logout} from "auth/utils/connection";
+import { logout } from "@/auth/utils/connection";
 
 export default {
-    name: "Logout",
+    name: "Log-out",
     setup() {
         return {
 

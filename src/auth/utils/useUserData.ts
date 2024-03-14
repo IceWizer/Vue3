@@ -1,4 +1,4 @@
-import {getJwt, isJwtExpired} from "@/auth/utils/useJwt";
+import { getJwt, isJwtExpired } from "@/auth/utils/useJwt";
 
 const isUserLoggedIn = () => {
     const user = getUserData();
@@ -6,7 +6,7 @@ const isUserLoggedIn = () => {
     return !!user && !isJwtExpired();
 }
 
-const getUserData = (isInRecursive = false) => {
+const getUserData = (isInRecursive: boolean = false): any => {
     const user = localStorage.getItem('user');
     if (user) {
         return JSON.parse(user);
@@ -18,7 +18,7 @@ const getUserData = (isInRecursive = false) => {
     return null;
 }
 
-const setUserData = (user) => {
+const setUserData = (user: any) => {
     localStorage.setItem('user', JSON.stringify(user));
 }
 
@@ -32,9 +32,5 @@ const isUserAdmin = () => {
 }
 
 export {
-    isUserLoggedIn,
-    getUserData,
-    setUserData,
-    removeUserData,
-    isUserAdmin
-}
+    getUserData, isUserAdmin, isUserLoggedIn, removeUserData, setUserData
+};

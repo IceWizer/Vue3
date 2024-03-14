@@ -6,13 +6,11 @@
 <script>
 
 export default {
-    name: "Dashboard",
+    name: "DashboardView",
     mounted() {
         //this.$store.dispatch('getTest');
     }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

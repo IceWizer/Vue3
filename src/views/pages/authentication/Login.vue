@@ -1,55 +1,42 @@
 <template>
     <div class="w-100 my-auto">
         <h1 class="text-center">Connexion</h1>
-        <b-form class="w-50 mx-auto">
+        <div class="w-50 mx-auto">
             <div class="mt-2">
                 <label for="username">Name</label>
-                <b-form-input
-                    type="text"
-                    name="username"
-                    id="username"
-                    v-model="item.username"
+                <BFormInput type="text" name="username" id="username" v-model="item.username"
                     :state="stateOn.username ? validators.username.isValidSync(item.username) : null"
-                    autocomplete="username"
-                    @focus="stateOn.username = true"
-                />
-                <b-form-invalid-feedback
-                    v-if="stateOn.username && !validators.username.isValidSync(item.username)"
-                >
+                    autocomplete="username" @focus="stateOn.username = true" />
+                <p v-if="stateOn.username && !validators.username.isValidSync(item.username)">
                     {{ getErrorMessage(validators.username, item.username) }}
-                </b-form-invalid-feedback>
+                </p>
             </div>
             <div class="mt-2">
                 <label for="password">Mot de passe</label>
-                <b-input-group>
-                    <b-form-input
-                        :type="showPassword ? 'text' : 'password'"
-                        name="password"
-                        id="password"
-                        rules="required"
-                        v-model="item.password"
+                <BFormGroup>
+                    <BFormInput :type="showPassword ? 'text' : 'password'" name="password" id="password"
+                        rules="required" v-model="item.password"
                         :state="stateOn.password ? validators.password.isValidSync(item.password) : null"
-                        autocomplete="current-password"
-                        @focus="stateOn.password = true"
-                    />
-                    <b-input-group-append>
-                        <b-button @click="showPassword = !showPassword" size="sm" variant="outline-secondary" class="text-dark rounded-end">
+                        autocomplete="current-password" @focus="stateOn.password = true" />
+                    <div>
+                        <button @click="showPassword = !showPassword" size="sm" variant="outline-secondary"
+                            class="text-dark rounded-end">
                             <b-icon-eye v-if="showPassword" />
                             <b-icon-eye-slash v-else />
-                        </b-button>
-                    </b-input-group-append>
-                    <b-form-invalid-feedback>
+                        </button>
+                    </div>
+                    <p>
                         {{ getErrorMessage(validators.password, item.password) }}
-                    </b-form-invalid-feedback>
-                </b-input-group>
+                    </p>
+                </BFormGroup>
             </div>
             <div class="mt-2 mx-auto w-50">
-                <b-button class="w-100" type="submit" @click="loginCheck()">Connecte toi</b-button>
+                <button class="w-100" type="submit" @click="loginCheck()">Connecte toi</button>
             </div>
             <div class="text-bg-danger mt-2 text-center rounded p-1" v-if="dataSent">
                 L'identifiant ou le mot de passe est incorrect
             </div>
-        </b-form>
+        </div>
         <div class="text-center mt-1">
             <router-link to="register">Tu n'as pas de compte. Créer un compte</router-link>
         </div>
@@ -58,12 +45,14 @@
 
 <script>
 import { login } from "@/auth/utils/connection";
+import { BFormGroup, BFormInput } from "bootstrap-vue-next";
 import * as Yup from "yup";
 
 export default {
-    name: "Login",
+    name: "Log-in",
     components: {
-
+        BFormGroup,
+        BFormInput
     },
     data() {
         return {
@@ -104,10 +93,10 @@ export default {
                 this.dataSent = true;
         },
         sendLogin() {
-            console.log(this.$store)
             this.$store.dispatch('auth_store/login', this.item)
                 .then((response) => {
-                    login(response.data.token);
+                    console.log()
+                    login(response.token);
                     this.$router.push({ name: 'dashboard' });
                 })
                 .catch((error) => {
@@ -129,6 +118,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

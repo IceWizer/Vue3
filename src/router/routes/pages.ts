@@ -1,8 +1,8 @@
-let routes = [
+const routes = [
     {
         path: '/',
         name: 'dashboard',
-        component: () => import('../../views/dashboard/Dashboard.vue'),
+        component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: {
             requiresAuth: true,
             redirectIfLoggedIn: false,
@@ -12,7 +12,7 @@ let routes = [
     {
         path: '/register',
         name: 'register',
-        component: () => import('../../views/pages/authentication/Register.vue'),
+        component: () => import('@/views/pages/authentication/Register.vue'),
         meta: {
             requiresAuth: false,
             redirectIfLoggedIn: true,
@@ -22,7 +22,7 @@ let routes = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('../../views/pages/authentication/Login.vue'),
+        component: () => import('@/views/pages/authentication/Login.vue'),
         meta: {
             requiresAuth: false,
             redirectIfLoggedIn: true,
@@ -32,7 +32,7 @@ let routes = [
     {
         path: '/logout',
         name: 'logout',
-        component: () => import('../../views/pages/authentication/Logout.vue'),
+        component: () => import('@/views/pages/authentication/Logout.vue'),
         meta: {
             requiresAuth: true,
             redirectIfLoggedIn: false,
@@ -42,7 +42,7 @@ let routes = [
     {
         path: '/error-404',
         name: 'error-404',
-        component: () => import('../../views/pages/miscellaneous/Error404.vue'),
+        component: () => import('@/views/pages/miscellaneous/Error404.vue'),
         meta: {
             requiresAuth: true,
             redirectIfLoggedIn: false,

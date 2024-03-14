@@ -1,18 +1,18 @@
 import axios from "axios";
-import {getJwt} from "../../auth/utils/useJwt";
+import { getJwt } from "../../auth/utils/useJwt";
 
 const apiRequest = (
-    url,
+    url: string,
     method: string = 'GET',
-    onSuccess = (response) => {},
+    onSuccess = () => { },
     data = null,
     headers =
         {
             'accept': 'application/ld+json',
-            'Authorization': 'Bearer ' + getJwt()
+            'Authorization': 'Bearer ' + getJwt(),
         }
 ) => {
-    url = '/api/' + url;
+    url = env.API_URL + url;
 
     if (!['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
         method = 'GET';
@@ -30,20 +30,20 @@ const apiRequest = (
     }
 
     return new Promise((resolve, reject) => {
-            axios({
-                url,
-                method,
-                data: data,
-                headers
+        axios({
+            url,
+            method,
+            data: data,
+            headers
+        })
+            .then((response) => {
+                onSuccess && onSuccess(response);
+                resolve(response.data['hydra:member'] || response.data || response);
             })
-                .then((response) => {
-                    onSuccess && onSuccess(response);
-                    resolve(response.data['hydra:member'] || response.data || response);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        }
+            .catch((error) => {
+                reject(error);
+            });
+    }
     );
 }
 
