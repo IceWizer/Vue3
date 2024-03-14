@@ -1,0 +1,6 @@
+projectKey=Demonstration
+serverUrl=http://172.17.0.3:9000
+serverVersion=10.4.0.87286
+dashboardUrl=http://172.17.0.3:9000/dashboard?id=Demonstration
+ceTaskId=474df73f-6bc8-450e-9ef2-8fa70bc8284e
+ceTaskUrl=http://172.17.0.3:9000/api/ce/task?id=474df73f-6bc8-450e-9ef2-8fa70bc8284e
