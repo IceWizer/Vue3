@@ -1,9 +1,9 @@
-import { getJwt, isJwtExpired } from "@/auth/utils/useJwt";
+import useJwt from "@/auth/utils/useJwt";
 
 const isUserLoggedIn = () => {
     const user = getUserData();
 
-    return !!user && !isJwtExpired();
+    return !!user && !useJwt.isJwtExpired();
 }
 
 const getUserData = (isInRecursive: boolean = false): any => {
@@ -12,7 +12,7 @@ const getUserData = (isInRecursive: boolean = false): any => {
         return JSON.parse(user);
     }
     if (!isInRecursive) {
-        setUserData(getJwt());
+        setUserData(useJwt.getJwt());
         return getUserData(true)
     }
     return null;
@@ -31,6 +31,6 @@ const isUserAdmin = () => {
     return user?.roles && user.roles.includes('ADMIN_ROLE');
 }
 
-export {
+export default {
     getUserData, isUserAdmin, isUserLoggedIn, removeUserData, setUserData
 };

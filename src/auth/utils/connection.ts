@@ -1,17 +1,17 @@
-import { getData, removeJwt, setJwt } from "@/auth/utils/useJwt";
-import { removeUserData, setUserData } from "@/auth/utils/useUserData";
+import useJwt from "@/auth/utils/useJwt";
+import useUserData from "@/auth/utils/useUserData";
 
 const login = (jwt: string): void => {
-    setJwt(jwt);
-    setUserData(getData());
+    useJwt.setJwt(jwt);
+    useUserData.setUserData(useJwt.getData());
 }
 
 const logout = (): void => {
-    removeJwt();
-    removeUserData();
+    useJwt.removeJwt();
+    useUserData.removeUserData();
 }
 
-export {
+export default {
     login,
     logout
 };

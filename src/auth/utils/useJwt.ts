@@ -28,7 +28,10 @@ const removeJwt = (): void => {
     localStorage.removeItem('token');
 }
 
-export {
+export default {
     getData,
-    getJwt, isJwtExpired, removeJwt, setJwt
+    getJwt,
+    isJwtExpired,
+    removeJwt,
+    setJwt
 };

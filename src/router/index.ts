@@ -1,4 +1,4 @@
-import { isUserLoggedIn } from '@/auth/utils/useUserData';
+import useUserData from '@/auth/utils/useUserData';
 import pages from '@/router/routes/pages';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -15,10 +15,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     // check if the route has requires auth
     if (to.meta?.requiresAuth) {
-        if (!isUserLoggedIn()) {
+        if (!useUserData.isUserLoggedIn()) {
             next({ name: 'login' });
         }
-    } else if (to.meta?.redirectIfLoggedIn && isUserLoggedIn()) {
+    } else if (to.meta?.redirectIfLoggedIn && useUserData.isUserLoggedIn()) {
         next({ name: 'dashboard' });
     }
     next();
