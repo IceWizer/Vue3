@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getJwt } from "../../auth/utils/useJwt";
+import useJwt from "../../auth/utils/useJwt";
 
 const apiRequest = (
     url: string,
@@ -9,7 +9,7 @@ const apiRequest = (
     headers =
         {
             'accept': 'application/ld+json',
-            'Authorization': 'Bearer ' + getJwt(),
+            'Authorization': 'Bearer ' + useJwt.getJwt(),
         }
 ) => {
     url = env.API_URL + url;

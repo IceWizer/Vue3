@@ -4,7 +4,7 @@
         <div class="w-50 mx-auto">
             <div class="mt-2">
                 <label for="username">Name</label>
-                <BFormInput type="text" name="username" id="username" v-model="item.username"
+                <input type="text" name="username" id="username" v-model="item.username"
                     :state="stateOn.username ? validators.username.isValidSync(item.username) : null"
                     autocomplete="username" @focus="stateOn.username = true" />
                 <p v-if="stateOn.username && !validators.username.isValidSync(item.username)">
@@ -13,8 +13,8 @@
             </div>
             <div class="mt-2">
                 <label for="password">Mot de passe</label>
-                <BFormGroup>
-                    <BFormInput :type="showPassword ? 'text' : 'password'" name="password" id="password"
+                <div>
+                    <input :type="showPassword ? 'text' : 'password'" name="password" id="password"
                         rules="required" v-model="item.password"
                         :state="stateOn.password ? validators.password.isValidSync(item.password) : null"
                         autocomplete="current-password" @focus="stateOn.password = true" />
@@ -28,7 +28,7 @@
                     <p>
                         {{ getErrorMessage(validators.password, item.password) }}
                     </p>
-                </BFormGroup>
+                </div>
             </div>
             <div class="mt-2 mx-auto w-50">
                 <button class="w-100" type="submit" @click="loginCheck()">Connecte toi</button>
@@ -44,16 +44,11 @@
 </template>
 
 <script>
-import { login } from "@/auth/utils/connection";
-import { BFormGroup, BFormInput } from "bootstrap-vue-next";
+import connection from "@/auth/utils/connection";
 import * as Yup from "yup";
 
 export default {
     name: "Log-in",
-    components: {
-        BFormGroup,
-        BFormInput
-    },
     data() {
         return {
             item: {
@@ -96,7 +91,7 @@ export default {
             this.$store.dispatch('auth_store/login', this.item)
                 .then((response) => {
                     console.log()
-                    login(response.token);
+                    connection.login(response.token);
                     this.$router.push({ name: 'dashboard' });
                 })
                 .catch((error) => {
