@@ -4,17 +4,22 @@ import useJwt from "../../auth/utils/useJwt";
 const apiRequest = (
     url: string,
     method: string = 'GET',
-    onSuccess = () => { },
-    data = null,
-    headers =
+    onSuccess: Function | null = () => { },
+    data: any = null,
+    headers: { [key: string]: string } =
         {
             'accept': 'application/ld+json',
             'Authorization': 'Bearer ' + useJwt.getJwt(),
         }
 ) => {
-    url = env.API_URL + url;
 
-    if (!['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+
+    url = import.meta.env.VITE_API_URL + url;
+    console.log(import.meta.env, import.meta.env.VITE_API_URL, url);
+
+    const methods: string[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+
+    if (!methods.includes(method)) {
         method = 'GET';
     }
 
@@ -36,11 +41,11 @@ const apiRequest = (
             data: data,
             headers
         })
-            .then((response) => {
+            .then((response: any) => {
                 onSuccess && onSuccess(response);
                 resolve(response.data['hydra:member'] || response.data || response);
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 reject(error);
             });
     }
@@ -50,3 +55,4 @@ const apiRequest = (
 export {
     apiRequest
 };
+

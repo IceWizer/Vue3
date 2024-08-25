@@ -20,6 +20,8 @@ router.beforeEach((to, from, next) => {
         }
     } else if (to.meta?.redirectIfLoggedIn && useUserData.isUserLoggedIn()) {
         next({ name: 'dashboard' });
+    } else if (to.meta?.onlyAdmin && !useUserData.isUserAdmin()) {
+        next({ name: 'dashboard' });
     }
     next();
 });

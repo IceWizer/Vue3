@@ -1,20 +1,29 @@
-<script setup lang="ts">
-import {RouterView} from 'vue-router';</script>
-
-<template>
-    <header>
-        <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125"/>
-
-        <div class="wrapper">
-
-            <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/about">About</RouterLink>
-            </nav>
-        </div>
-    </header>
-
-    <RouterView/>
+<template class="my-auto">
+    <div id="app">
+        <Navbar v-if="showNavbar" />
+        <RouterView class=" my-auto" />
+    </div>
 </template>
 
 <style scoped></style>
+
+<script lang="ts">
+import { RouterView } from 'vue-router';
+
+import Navbar from "./components/Navbar.vue";
+
+export default {
+    components: {
+        Navbar,
+        RouterView
+    },
+    computed: {
+        showNavbar() {
+            // Liste des chemins où la navbar ne doit pas être affichée
+            // const noNavbarRoutes = ['/login', '/register', '/forgotten-password', '/verify-email'];
+            return this.$route.meta.layout === "default";
+            // return !noNavbarRoutes.includes(this.$route.path);
+        }
+    }
+};
+</script>

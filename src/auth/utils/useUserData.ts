@@ -28,7 +28,7 @@ const removeUserData = () => {
 
 const isUserAdmin = () => {
     const user = getUserData();
-    return user?.roles && user.roles.includes('ADMIN_ROLE');
+    return user?.roles && user.roles.includes('ROLE_ADMIN');
 }
 
 export default {

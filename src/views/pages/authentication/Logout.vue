@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <h1>Logout</h1>
+    <div class="text-center gap-2">
+        <h1>Déconnexion</h1>
+        <span class="loading loading-spinner loading-lg"></span>
     </div>
 </template>
 
-<script>
-import { logout } from "@/auth/utils/connection";
+<script lang="ts">
+import connection from "@/auth/utils/connection";
 
 export default {
     name: "Log-out",
@@ -19,12 +20,12 @@ export default {
     },
     methods: {
         logout() {
-            this.$store.dispatch('authStore/logout')
-                .then((response) => {
-                    logout();
+            this.$store.dispatch('auth_store/logout')
+                .then((response: any) => {
+                    connection.logout();
                     this.$router.push({ name: 'login' });
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     console.log(error);
                 });
         }

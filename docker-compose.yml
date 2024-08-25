@@ -1,12 +1,12 @@
 version: '3.8'
 services:
   encore:
-    image: node:21-bookworm
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/app
-      - .docker/entrypoint.sh:/app/.docker/entrypoint.sh [ro]
-    working_dir: /app
+      - .docker/entrypoint.sh:/docker/entrypoint.sh
     ports:
       - "5173:5173"
       - "4173:4173"
-    entrypoint: ".docker/entrypoint.sh"

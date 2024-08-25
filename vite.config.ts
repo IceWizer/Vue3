@@ -7,36 +7,65 @@ export default defineConfig(({ command, mode }) => {
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, ".", '');
 
-  return {
-    // vite config
-    define: {
-      env: JSON.stringify(env),
-    },
 
-    plugins: [
-      vue(),
-    ],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-        '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
-      }
-    },
-    server: {
-      host: true,
-      port: 5173, // This is the port which we will use in docker
-      // Thanks @sergiomoura for the window fix
-      // add the next lines if you're using windows and hot reload doesn't work
-      watch: {
-        usePolling: true
-      }
-    },
-    optimizeDeps: {
-      esbuildOptions: {
-        target: 'es2020',
+  if (command === "serve") {
+
+    return {
+      // vite config
+      define: {
+        __VITE_BASE_URL__: JSON.stringify(env.VITE_BASE_URL),
+        __VITE_API_URL__: JSON.stringify(env.VITE_API_URL),
       },
-    }
-  };
+
+      plugins: [
+        vue(),
+      ],
+      resolve: {
+        alias: {
+          '@': fileURLToPath(new URL('./src', import.meta.url)),
+          '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
+        }
+      },
+      server: {
+        host: true,
+        port: 5173, // This is the port which we will use in docker
+        // Thanks @sergiomoura for the window fix
+        // add the next lines if you're using windows and hot reload doesn't work
+        watch: {
+          usePolling: true
+        }
+      },
+      optimizeDeps: {
+        esbuildOptions: {
+          target: 'es2020',
+        },
+      }
+    };
+  } else {
+
+    return {
+      // vite config
+      define: {
+        __VITE_BASE_URL__: JSON.stringify(env.VITE_BASE_URL),
+        __VITE_API_URL__: JSON.stringify(env.VITE_API_URL),
+      },
+
+      plugins: [
+        vue(),
+      ],
+      resolve: {
+        alias: {
+          '@': fileURLToPath(new URL('./src', import.meta.url)),
+          '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
+        }
+      },
+      optimizeDeps: {
+        esbuildOptions: {
+          target: 'es2020',
+        },
+      }
+    };
+  }
 });
 
 

@@ -30,6 +30,16 @@ const routes = [
         }
     },
     {
+        path: '/verify-email/:token',
+        name: 'verify-email',
+        component: () => import('@/views/pages/authentication/VerifyEmail.vue'),
+        meta: {
+            requiresAuth: false,
+            redirectIfLoggedIn: true,
+            layout: 'full'
+        }
+    },
+    {
         path: '/logout',
         name: 'logout',
         component: () => import('@/views/pages/authentication/Logout.vue'),
@@ -37,6 +47,27 @@ const routes = [
             requiresAuth: true,
             redirectIfLoggedIn: false,
             layout: 'full'
+        }
+    },
+    {
+        path: '/forgotten-password',
+        name: 'forgotten-password',
+        component: () => import('@/views/pages/authentication/ForgotPassword.vue'),
+        meta: {
+            requiresAuth: false,
+            redirectIfLoggedIn: true,
+            layout: 'full'
+        }
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password',
+        component: () => import('@/views/pages/authentication/ResetPassword.vue'),
+        meta: {
+            requiresAuth: false,
+            redirectIfLoggedIn: true,
+            layout: 'full'
+
         }
     },
     {

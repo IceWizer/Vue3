@@ -1,106 +1,84 @@
 <template>
-    <div class="">
-        <div class="w-50 mx-auto">
-            <h1 class="text-center">Création de compte</h1>
-            <form>
-                <div class="mt-2">
-                    <label for="username">Name</label>
-                    <BFormInput
-                        type="text"
-                        name="username"
-                        id="username"
-                        v-model="item.username"
-                        :state="stateOn.username ? validators.username.isValidSync(item.username) : null"
-                        autocomplete="username"
-                        @focus="stateOn.username = true"
-                    />
-                    <p>
-                        {{ getErrorMessage(validators.username, item.username) }}
-                    </p>
-                </div>
-                <div class="mt-2">
-                    <label for="email">Mail</label>
-                    <BFormInput
-                        type="text"
-                        name="email"
-                        id="email"
-                        v-model="item.email"
-                        :state="stateOn.email ? validators.email.isValidSync(item.email) : null"
-                        autocomplete="email"
-                        @focus="stateOn.email = true"
-                    />
+    <div class="flex h-full justify-center items-center">
+        <div class="self-center">
+            <h1 class="text-center text-2xl">Inscription</h1>
+            <div class="w-full mx-auto">
+                <div class="my-5">
+                    <label class="input input-bordered flex items-center gap-2" for="email">
+                        <font-awesome-icon :icon="['fas', 'envelope']" />
+                        <input class="grow" type="text" placeholder="Email" name="email" id="email" v-model="item.email"
+                            :state="stateOn.email ? validators.email.isValidSync(item.email) : null"
+                            autocomplete="email" @focus="stateOn.email = true" required />
+                    </label>
                     <p>
                         {{ getErrorMessage(validators.email, item.email) }}
                     </p>
                 </div>
-                <div class="mt-2">
-                    <label for="password">Mot de passe</label>
-                    <BFormGroup>
-                        <BFormInput
-                            :type="showPassword ? 'text' : 'password'"
-                            name="password"
-                            id="password"
-                            rules="required"
-                            v-model="item.password"
+                <div class="my-5">
+                    <label for="password" class="input input-bordered flex items-center gap-2">
+                        <font-awesome-icon :icon="['fas', 'key']" />
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Mot de passe" name="password"
+                            id="password" rules="required" class="grow" v-model="item.password"
                             :state="stateOn.password ? validators.password.isValidSync(item.password) : null"
-                            autocomplete="current-password"
-                            @focus="stateOn.password = true"
-                        />
-                        <div>
-                            <button @click="showPassword = !showPassword" size="sm" variant="outline-secondary" class="text-dark rounded-end">
-                                <b-icon-eye v-if="showPassword" />
-                                <b-icon-eye-slash v-else />
-                            </button>
-                        </div>
-                        <p>
-                            {{ getErrorMessage(validators.password, item.password) }}
-                        </p>
-                    </BFormGroup>
+                            autocomplete="current-password" @focus="stateOn.password = true" required />
+                        <button @click="showPassword = !showPassword" size="sm" variant="outline-secondary"
+                            class="text-dark rounded-end">
+                            <font-awesome-icon :icon="['fas', 'eye-slash']" v-if="showPassword" />
+                            <font-awesome-icon :icon="['fas', 'eye']" v-else />
+                        </button>
+                    </label>
+                    Temps pour trouver le mot de passe : <span class="text-error">{{
+                        passwordStrength(item.password ?? "").value }}</span><a
+                        href="https://patrowl.io/fr/le-tableau-de-la-resistance-des-mots-de-passe/" target="_blank"></a>
+                    <p>
+                        {{ getErrorMessage(validators.password, item.password) }}
+                    </p>
                 </div>
-                <div class="mt-2 mx-auto w-50">
-                    <button class="w-100" type="submit" @click="registerCheck()">Créer ton compte</button>
-                </div>
-            </form>
+            </div>
+            <div class="my-5 mx-auto w-50 text-center">
+                <button class="w-100 btn btn-primary" type="submit" @submit.prevent @click="registerCheck()">Créer ton
+                    compte</button>
+            </div>
             <div class="text-center mt-1">
-                <router-link to="login">Déjà un compte</router-link>
+                <router-link to="login">J'ai déjà un compte</router-link>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import { useModules } from "@store/utils";
-import authStore from "@store/modules/authStore";
-import {onUnmounted} from "vue";
+<script lang="ts">
 import * as Yup from "yup";
-import {BFormGroup, BFormInput} from "bootstrap-vue-next";
+import passwordStrength from '@/utils/passwordStrength';
+import User from "@/models/user";
+
+interface Data {
+    item: User;
+    stateOn: {
+        email: boolean;
+        password: boolean;
+        [key: string]: boolean; // Add index signature
+    };
+    validators: {
+        email: Yup.StringSchema<string | undefined, Yup.AnyObject, undefined, "">;
+        password: Yup.StringSchema<string | undefined, Yup.AnyObject, undefined, "">;
+        [key: string]: Yup.StringSchema<string | undefined, Yup.AnyObject, undefined, "">; // Add index signature
+    };
+    showPassword: boolean;
+    errors: Record<string, string>;
+}
 
 export default {
-    name: "Register.vue",
-  components: {BFormGroup, BFormInput},
-  data() {
+    name: "Auth_Register",
+    data(): Data {
         return {
-            item: {
-                username: '',
-                email: '',
-                password: ''
-            },
+            item: new User(),
             stateOn: {
-                username: false,
                 email: false,
                 password: false,
             },
             validators: {
-                username: Yup.string()
-                            .min(3, 'Username doit contenir au minimum 3 caractères')
-                            .required('Le champ username est obligatoire'),
-                email: Yup.string()
-                            .email('L\'email doit être valide')
-                            .required('Le champ email est obligatoire'),
-                password: Yup.string()
-                            .min(8, 'Le mot de passe doit avoir au minimum 8 caractères')
-                            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/, 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)')
-                            .required('Le champ password est obligatoire')
+                email: Yup.string(),
+                password: Yup.string(),
             },
 
             showPassword: false,
@@ -109,30 +87,19 @@ export default {
         }
     },
     setup() {
-        const modules = [
-            {
-                store: authStore,
-            }
-        ]
-        const { umount } = useModules(modules);
-
-        onUnmounted(() => {
-            umount();
-        });
-
         return {
-            modules,
-            Yup
+            Yup,
+            passwordStrength
         }
     },
     methods: {
         registerCheck() {
             let canRegister = true;
-            for (const [key, value] of Object.entries(this.item)) {
-                if (!this.stateOn[key] || this.getErrorMessage(this.validators[key], value) !== null) {
-                    canRegister = false;
-                }
-            }
+            // for (const [key, value] of Object.entries(this.item)) {
+            //     if (!this.stateOn[key] || this.getErrorMessage(this.validators[key], value) !== null) {
+            //         canRegister = false;
+            //     }
+            // }
 
             if (canRegister)
                 this.sendRegister();
@@ -142,21 +109,23 @@ export default {
         sendRegister() {
             this.$store.dispatch('auth_store/register', this.item)
                 .then(() => {
-                    this.$router.push({name: 'login'});
+                    this.$router.push({ name: 'login' });
                 });
         },
-        getErrorMessage(validator, itemToValidate) {
+        getErrorMessage(validator: any, itemToValidate: any) {
             try {
                 validator.validateSync(itemToValidate);
                 return null;
-            } catch (err) {
+            } catch (err: any) {
                 return err.message;
             }
         }
+    },
+    mounted() {
+        this.item.email = "";
+        this.item.password = "";
     }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
